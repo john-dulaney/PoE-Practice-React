@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-// import $ from 'jquery';
+import $ from 'jquery';
 // import fetchJsonp from 'fetch-jsonp';
 class GetProfile extends Component {
   constructor(props) {
@@ -12,30 +12,13 @@ class GetProfile extends Component {
   }
 
   componentDidMount() {
-    fetch('https://api.pathofexile.com/public-stash-tabs', {
-      mode: 'no-cors',
-      method: 'GET',
-      headers: {
-        'content-type': 'application/jsonp'
-      }
-    })
-      .then(res => res.json())
-      .then(
-        result => {
-          console.log(result);
-
-          this.setState({
-            isLoaded: true,
-            response: result,
-          });
-        },
-        error => {
-          this.setState({
-            isLoaded: true,
-            error,
-          });
-        }
-      );
+    $.ajax({
+      url: 'https://www.pathofexile.com/character-window/get-account-name',
+      dataType: 'json',
+      contentType: "application/json",
+    }).done(accountName => {
+      console.log('Got', accountName);
+    });
   }
 
   render() {
@@ -44,7 +27,8 @@ class GetProfile extends Component {
       return (
         <div>
           <span
-            style={{marginTop: '20px', backgroundColor: 'rgb(255, 128, 128)'}}>
+            style={{marginTop: '20px', backgroundColor: 'rgb(255, 128, 128)'}}
+          >
             {' '}⚠️Error: {error.message}⚠️{' '}
           </span>
         </div>
@@ -59,16 +43,43 @@ class GetProfile extends Component {
       );
     } else {
       return (
-        <ul>
-          {response.map(item =>
-            <li key={item.checklistItemId}>
-              {item.checklistAction} {item.tripTypeId} {item.tripType}
-            </li>
-          )}
-        </ul>
+        <div>
+          {response}
+        </div>
+
+        // <ul>
+        //   {response.map(item =>
+        //     <li key={item.Id}>
+        //       {item}
+        //     </li>
+        //   )}
+        // </ul>
       );
     }
   }
 }
 
 export default GetProfile;
+
+// fetchJsonp(`http://api.pathofexile.com/public-stash-tabs`, {
+//   mode: 'no-cors',
+//   method: 'GET'
+// })
+//   //   .then(r => r.json())
+//   .then(
+//     result => {
+//       console.log(result);
+//       this.setState({
+//         isLoaded: true,
+//         response: result,
+//       });
+//     },
+//     error => {
+//       this.setState({
+//         isLoaded: true,
+//         response: error,
+//         error,
+//       });
+//       console.log(error);
+//     }
+//   );
