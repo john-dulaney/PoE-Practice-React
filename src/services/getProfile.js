@@ -7,18 +7,45 @@ class GetProfile extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      reponse: [],
+      response: [],
     };
   }
 
   componentDidMount() {
+    // GGG example refitted for stash tabs
     $.ajax({
-      url: 'https://www.pathofexile.com/character-window/get-account-name',
-      dataType: 'json',
-      contentType: "application/json",
-    }).done(accountName => {
-      console.log('Got', accountName);
+      url: 'http://api.pathofexile.com/public-stash-tabs',
+      dataType: 'jsonp',
+    }).done(function(league) {
+      console.log('Got', league.id, 'league');
     });
+
+    // fetch api way with headers
+    fetch(`http://api.pathofexile.com/public-stash-tabs`, {
+      mode: 'no-cors',
+      method: 'GET',
+      headers: {
+        'content-type': 'application/jsonp',
+      },
+    })
+    //   .then(r => r.json())
+      .then(
+        result => {
+          console.log(result);
+          this.setState({
+            isLoaded: true,
+            response: result,
+          });
+        },
+        error => {
+          this.setState({
+            isLoaded: true,
+            response: error,
+            error,
+          });
+          console.log(error);
+        }
+      );
   }
 
   render() {
@@ -43,43 +70,18 @@ class GetProfile extends Component {
       );
     } else {
       return (
-        <div>
-          {response}
-        </div>
+        // <div>[response]</div>
 
-        // <ul>
-        //   {response.map(item =>
-        //     <li key={item.Id}>
-        //       {item}
-        //     </li>
-        //   )}
-        // </ul>
+        <ul>
+          {/* {response.map(item =>
+            <li key={item.Id}>
+              {item}
+            </li>
+          )} */}
+        </ul>
       );
     }
   }
 }
 
 export default GetProfile;
-
-// fetchJsonp(`http://api.pathofexile.com/public-stash-tabs`, {
-//   mode: 'no-cors',
-//   method: 'GET'
-// })
-//   //   .then(r => r.json())
-//   .then(
-//     result => {
-//       console.log(result);
-//       this.setState({
-//         isLoaded: true,
-//         response: result,
-//       });
-//     },
-//     error => {
-//       this.setState({
-//         isLoaded: true,
-//         response: error,
-//         error,
-//       });
-//       console.log(error);
-//     }
-//   );
