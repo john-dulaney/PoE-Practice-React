@@ -16,7 +16,7 @@ class GetProfile extends Component {
     $.ajax({
       url: 'http://api.pathofexile.com/public-stash-tabs',
       dataType: 'jsonp',
-    }).done(function(league) {
+    }).done(league => {
       console.log('Got', league.id, 'league');
     });
 
@@ -28,6 +28,7 @@ class GetProfile extends Component {
         'content-type': 'application/jsonp',
       },
     })
+    // For some reason .json() doesnt play well with whatever response it is.
     //   .then(r => r.json())
       .then(
         result => {
@@ -70,16 +71,8 @@ class GetProfile extends Component {
       );
     } else {
       return (
-        // <div>[response]</div>
-
-        <ul>
-          {/* {response.map(item =>
-            <li key={item.Id}>
-              {item}
-            </li>
-          )} */}
-        </ul>
-      );
+        <div>{response}</div>
+      )
     }
   }
 }
