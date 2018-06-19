@@ -71,7 +71,7 @@ class GetProfile extends Component {
       );
     } else {
       return (
-        <div>{response}</div>
+        <div>{this.response.render()}</div>
       )
     }
   }
